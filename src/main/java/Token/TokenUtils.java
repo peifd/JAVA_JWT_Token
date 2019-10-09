@@ -86,6 +86,8 @@ public class TokenUtils {
             if (jsonObject.containsKey("exp")) {
                 Long expTime = Long.valueOf(jsonObject.get("exp").toString());
                 Long nowTime = new Date().getTime();
+                System.out.println("exptime"+ expTime);
+                System.out.println("nowtime"+ nowTime);
                 //判断是否过期
                 if (nowTime > expTime) {
                     //已经过期

@@ -25,7 +25,9 @@ public class TokenHS256 {
         //生成时间
         map.put("sta", new Date().getTime());
         //过期时间
-        map.put("exp", new Date().getTime()+6);
+        map.put("exp", new Date().getTime()+600000);
+
+        System.out.println(map.toString());
         try {
             String token = TokenUtils.creatTokenHS256(map);
             System.out.println("token="+token);
@@ -56,9 +58,7 @@ public class TokenHS256 {
                     System.out.println("token已经过期");
                 }
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (JOSEException e) {
+        } catch (ParseException | JOSEException e) {
             e.printStackTrace();
         }
     }
@@ -66,7 +66,7 @@ public class TokenHS256 {
     public static void main(String[] ages) {
 
         //获取token
-        String uid = "kkksuejrmf";
+        String uid = "001471";
         String token = TokenTest(uid);
         //解析token
         ValidToken(token);

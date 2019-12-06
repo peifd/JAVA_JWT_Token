@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author 给我丶鼓励
+ * @author jwt工具类
  */
 public class TokenUtils {
 
@@ -30,7 +30,7 @@ public class TokenUtils {
 
 
     //生成一个token
-    public static String creatTokenHS256(Map<String,Object> payloadMap) throws JOSEException {
+    public static String creatTokenHS256(Map<String, Object> payloadMap) throws JOSEException {
 
         //3.先建立一个头部Header
         /**
@@ -59,10 +59,10 @@ public class TokenUtils {
         return jwsObject.serialize();
 
 
-
     }
+
     //解析token
-    public static Map<String,Object> validHS256(String token) throws ParseException, JOSEException {
+    public static Map<String, Object> validHS256(String token) throws ParseException, JOSEException {
 //        解析token
         JWSObject jwsObject = JWSObject.parse(token);
         //建立一个解锁密匙
@@ -72,10 +72,10 @@ public class TokenUtils {
 
 
     //验证token信息
-    private static Map<String,Object> verify(JWSObject jwsObject,JWSVerifier jwsVerifier) throws JOSEException {
+    private static Map<String, Object> verify(JWSObject jwsObject, JWSVerifier jwsVerifier) throws JOSEException {
         Map<String, Object> resultMap = new HashMap<>();
         //获取到载荷
-        Payload payload=jwsObject.getPayload();
+        Payload payload = jwsObject.getPayload();
         //判断token
         if (jwsObject.verify(jwsVerifier)) {
             resultMap.put("Result", 0);
@@ -86,8 +86,8 @@ public class TokenUtils {
             if (jsonObject.containsKey("exp")) {
                 Long expTime = Long.valueOf(jsonObject.get("exp").toString());
                 Long nowTime = new Date().getTime();
-                System.out.println("exptime"+ expTime);
-                System.out.println("nowtime"+ nowTime);
+                System.out.println("exptime" + expTime);
+                System.out.println("nowtime" + nowTime);
                 //判断是否过期
                 if (nowTime > expTime) {
                     //已经过期
@@ -95,7 +95,7 @@ public class TokenUtils {
                     resultMap.put("Result", 2);
                 }
             }
-        }else {
+        } else {
             resultMap.put("Result", 1);
         }
         return resultMap;
@@ -111,7 +111,7 @@ public class TokenUtils {
     }
 
     //进行token加密
-    public static String creatTokenRS256(Map<String,Object> payloadMap,RSAKey rsaJWK) throws JOSEException {
+    public static String creatTokenRS256(Map<String, Object> payloadMap, RSAKey rsaJWK) throws JOSEException {
 
         //私密钥匙
         JWSSigner signer = new RSASSASigner(rsaJWK);
@@ -123,12 +123,12 @@ public class TokenUtils {
         //进行加密
         jwsObject.sign(signer);
 
-        String token= jwsObject.serialize();
+        String token = jwsObject.serialize();
         return token;
     }
 
     //验证token
-    public static Map<String,Object> validRS256(String token,RSAKey rsaJWK) throws ParseException, JOSEException {
+    public static Map<String, Object> validRS256(String token, RSAKey rsaJWK) throws ParseException, JOSEException {
         //获取到公钥
         RSAKey rsaKey = rsaJWK.toPublicJWK();
         JWSObject jwsObject = JWSObject.parse(token);
